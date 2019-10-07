@@ -1,0 +1,45 @@
+{% extends 'blog\blog_base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}|| post-detail ||{% endblock %}
+{% block post_content %}
+  <div class="postBox">
+      <div class="imgBx">
+        <img src="{{ post.thumbnail.url }}" alt="" class="img-fluid">
+        <p class="text-muted my-3"><em>Published : {{ post.pub_date|date }}</em></p>
+      </div>
+      <div class="content">
+        <p class="lead">{{ post.body|safe }}</p>
+      </div>
+  </div>
+  <div class="container">
+    <form method="post">
+      {% csrf_token %}
+      <fieldset>
+        <legend>Add Comment</legend>
+        {{ comment_form|crispy }}
+        <input type="submit" class="btn btn-outline-primary" value="Comment">
+      </fieldset>
+    </form>
+    <div class="">
+      <h2 class="display-3">Comments -</h2>
+      {% if comments %}
+        <ul>
+          {% for c in comments %}
+            <li>{{c.text}}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+  </div>
+{% endblock %}
+{% block side_content %}
+  {% if similar_posts %}
+    <h3>Similar Post</h3>
+    <ul>
+      {% for p in similar_posts %}
+        <li><a href="{{ p.get_absolute_url }}">{{p.title}}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

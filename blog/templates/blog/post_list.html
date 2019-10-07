@@ -1,0 +1,42 @@
+{% extends 'blog/blog_base.html' %}
+{% load static %}
+
+{% block blog_styles %}
+  <link rel="stylesheet" href="{% static 'blog/css/post_detail.css' %}">
+{% endblock %}
+
+{% block title %}|| Blog ||{% endblock %}
+
+{% block post_content %}
+  {% if tag %}
+    <div class="row">
+      <h3 class="display-4">Posts having "{{tag}}" are -</h3>
+    </div>
+  {% endif %}
+  {% if author %}
+    <div class="row">
+      <h3 class="display-4">Posts written by "{{author}}" are -</h3>
+    </div>
+  {% endif %}
+  {% for p in posts %}
+    <div class="postBx my-2 py-3 border-bottom">
+      <h4 class="display-4"><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></h4>
+      <p class="lead">{{ p.body|safe|truncatewords_html:50}}</p>
+      <div class="d-flex justify-content-between">
+        <p class="text-muted">{{ p.pub_date }}</p>
+        <p><a href="{% url 'blog:share' slug=p.slug %}">Share</a></p>
+        <p><a href="#">{{ p.author }}</a></p>
+      </div>
+      {% if p.tags.all %}
+        Tags:
+        {% for t in p.tags.all %}
+          <a href="{% url 'blog:post-list' t.slug %}">{{t}}</a>
+          {% if not forloop.last%}, {% endif%}
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  {% include 'blog/paginator.html' with page_obj=posts%}
+
+{% endblock %}

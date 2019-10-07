@@ -1,0 +1,16 @@
+{% extends 'blog/blog_base.html' %}
+{% load crispy_forms_tags %}
+{% block post_content %}
+  <div class="container">
+    <form  method="post">
+      {% csrf_token %}
+      <fieldset>
+        <legend>Share "{{post.title}}" Link via email</legend>
+        {{ form|crispy }}
+      </fieldset>
+      <div class="form-group">
+        <input type="submit" class="btn btn-outline-primary" value="Send">
+      </div>
+    </form>
+  </div>
+{% endblock %}
